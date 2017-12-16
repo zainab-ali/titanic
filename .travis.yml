@@ -7,7 +7,7 @@ branches:
   only:
   - master
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION clean compile run
+  - sbt clean compile "runMain titanic.app.HypothesisRunner"
 cache:
   directories:
   - "$HOME/.ivy2/cache"
