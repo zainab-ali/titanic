@@ -1,5 +1,7 @@
 # Titanic
 
+[![Build Status](https://travis-ci.org/zainab-ali/titanic.svg?branch=master)](https://travis-ci.org/zainab-ali/titanic)
+
 ## Aim
 
 To predict whether a person would have lived or died on the Titanic.
