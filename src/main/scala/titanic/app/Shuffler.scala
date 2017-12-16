@@ -21,8 +21,12 @@ object Shuffler {
   val random = new Random(42)
 
   def shuffle(): Unit = {
-    val rows = CSVReader[PreshuffledRow].readCSVFromFileName(
-      Config.preshuffledFileName, skipHeader = true)
+
+    val reader = Source.fromResource(Config.preshuffledFileName).bufferedReader
+    val rows = CSVReader[PreshuffledRow].readCSVFromReader(
+      reader, skipHeader = true).toList
+    reader.close()
+
     val shuffled = random.shuffle(rows)
 
     val rawData = shuffled.zipWithIndex.map {
@@ -47,8 +51,8 @@ object Shuffler {
     val trainingData = rawData.drop(Config.testSize)
     val testData = rawData.take(Config.testSize)
 
-    trainingData.writeCSVToFileName(Config.trainingFileName)
-    testData.writeCSVToFileName(Config.testFileName)
+    trainingData.writeCSVToFileName(Config.basePath + Config.trainingFileName)
+    testData.writeCSVToFileName(Config.basePath + Config.testFileName)
   }
 
   def main(args: Array[String]) = {

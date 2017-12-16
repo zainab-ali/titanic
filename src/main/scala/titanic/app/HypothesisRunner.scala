@@ -1,6 +1,9 @@
 package titanic
 package app
 
+import java.io.File
+import scala.io.Source
+
 import purecsv.unsafe._
 
 import matryoshka.implicits._
@@ -17,11 +20,17 @@ object HypothesisRunner {
     */
   def main(args: Array[String]) = {
 
-    val testRows = CSVReader[RawDataRow].readCSVFromFileName(
-      Config.testFileName, skipHeader = false)
+    val testReader = Source.fromResource(Config.testFileName).bufferedReader
+    val trainingReader = Source.fromResource(Config.trainingFileName).bufferedReader
 
-    val trainingRows = CSVReader[RawDataRow].readCSVFromFileName(
-      Config.trainingFileName, skipHeader = false)
+    val testRows = CSVReader[RawDataRow].readCSVFromReader(
+      testReader, skipHeader = false).toList
+
+    val trainingRows = CSVReader[RawDataRow].readCSVFromReader(
+      trainingReader, skipHeader = false).toList
+
+    testReader.close()
+    trainingReader.close()
 
     // Build a greedy decision tree
     val greedyTree = (trainingRows.map(treeHypothesis.extract) -> features)

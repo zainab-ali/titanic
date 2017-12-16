@@ -1,0 +1,14 @@
+language: scala
+scala:
+- 2.12.4
+jdk:
+- oraclejdk8
+branches:
+  only:
+  - master
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION clean compile run
+cache:
+  directories:
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt/boot/scala-$TRAVIS_SCALA_VERSION"
